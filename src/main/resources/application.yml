@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ReactivePlayground
+server:
+  port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,beans,mappings
