@@ -1,4 +1,4 @@
-package io.alank.reactiveplayground.domain
+package io.alank.reactiveplayground.domain.trade
 
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.stereotype.Service
@@ -15,13 +15,12 @@ class TradeHandler(private val repository: TradeRepository) {
                     .contentType(APPLICATION_JSON)
                     .body(repository.findAll(), Trade::class.java)
 
-    fun save(request: ServerRequest): Mono<ServerResponse> {
-        return request.bodyToMono(Trade::class.java)
-                .flatMap { repository.save(it) }
-                .flatMap {
-                    ServerResponse.created(URI.create("/api/v1/tasks/${it.id}"))
-                            .body(Mono.just(it), Trade::class.java)
-                }
-                .switchIfEmpty(ServerResponse.badRequest().build())
-    }
+    fun save(request: ServerRequest): Mono<ServerResponse> =
+            request.bodyToMono(Trade::class.java)
+                    .flatMap { repository.save(it) }
+                    .flatMap {
+                        ServerResponse.created(URI.create("/api/v1/trades/${it.id}"))
+                                .body(Mono.just(it), Trade::class.java)
+                    }
+                    .switchIfEmpty(ServerResponse.badRequest().build())
 }
