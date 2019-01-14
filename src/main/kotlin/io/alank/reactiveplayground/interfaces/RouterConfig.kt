@@ -1,6 +1,5 @@
-package io.alank.reactiveplayground
+package io.alank.reactiveplayground.interfaces
 
-import io.alank.reactiveplayground.domain.trade.TradeHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON
