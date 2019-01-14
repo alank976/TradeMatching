@@ -7,7 +7,7 @@ val junit5Version = "5.3.2"
 plugins {
     idea
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.11"
-    id("org.springframework.boot") version "2.1.1.RELEASE"
+    id("org.springframework.boot") version "2.1.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
     kotlin("jvm") version "1.3.11"
 }
