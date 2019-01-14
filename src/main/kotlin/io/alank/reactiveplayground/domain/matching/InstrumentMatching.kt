@@ -1,9 +1,11 @@
 package io.alank.reactiveplayground.domain.matching
 
 
+import io.alank.reactiveplayground.domain.account.AccountGroup
 import io.alank.reactiveplayground.domain.trade.*
 
-data class InstrumentMatching(val ticker: String,
+data class InstrumentMatching(val accountGroup: AccountGroup,
+                              val ticker: String,
                               val buyTrades: List<Trade> = listOf(),
                               val sellTrades: List<Trade> = listOf(),
                               val results: List<MatchingResult> = listOf()) {
@@ -11,7 +13,7 @@ data class InstrumentMatching(val ticker: String,
     fun handle(tradeEvent: TradeEvent): InstrumentMatching = when (tradeEvent) {
         is EndOfTradeStreamEvent -> copy(buyTrades = listOf(),
                 sellTrades = listOf(),
-                results = (buyTrades + sellTrades).map { UnmatchedResult(it, tradeEvent.marketPrice) })
+                results = (buyTrades + sellTrades).map { UnmatchedResult(it, tradeEvent.marketPrice, accountGroup) })
         is BuySellTradeEvent -> {
             val trade = tradeEvent.trade
             if (trade.way.opposite().trades().isEmpty()) {
@@ -59,9 +61,9 @@ data class InstrumentMatching(val ticker: String,
 
     private fun matchCompletely(trade1: Trade, trade2: Trade, quantity: Long): MatchedResult =
             if (trade1.way == Way.B) {
-                MatchedResult(trade1.id!!, trade1.price, trade2.id!!, trade2.price, quantity)
+                MatchedResult(trade1.id!!, trade1.price, trade2.id!!, trade2.price, quantity, accountGroup)
             } else {
-                MatchedResult(trade2.id!!, trade2.price, trade1.id!!, trade1.price, quantity)
+                MatchedResult(trade2.id!!, trade2.price, trade1.id!!, trade1.price, quantity, accountGroup)
             }
 
     private fun Way.opposite() = if (Way.B == this) Way.S else Way.B

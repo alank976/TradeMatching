@@ -6,14 +6,17 @@ val junit5Version = "5.3.2"
 
 plugins {
     idea
+//    `kotlin-dsl`
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.11"
     id("org.springframework.boot") version "2.1.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
     kotlin("jvm") version "1.3.11"
+    kotlin("kapt") version "1.3.11"
 }
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencyManagement {
@@ -32,6 +35,7 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot", "spring-boot-starter-webflux")
     compileOnly("org.springframework.boot", "spring-boot-configuration-processor")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
 

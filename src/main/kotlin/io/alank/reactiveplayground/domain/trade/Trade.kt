@@ -6,7 +6,8 @@ data class Trade(@Id val id: String? = null,
                  val ticker: String,
                  val way: Way,
                  val price: Double,
-                 val quantity: Long) {
+                 val quantity: Long,
+                 val account: String? = null) {
     override fun equals(other: Any?) = id == (other as Trade).id
 }
 
