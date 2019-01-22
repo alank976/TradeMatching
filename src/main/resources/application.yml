@@ -1,6 +1,10 @@
 spring:
   application:
     name: ReactivePlayground
+  data:
+    mongodb:
+      uri: mongodb://localhost:32771
+      database: matching
 server:
   port: 8888
 
