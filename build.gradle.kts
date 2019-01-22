@@ -37,17 +37,14 @@ dependencies {
     compileOnly("org.springframework.boot", "spring-boot-configuration-processor")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
 
+    testImplementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
     testImplementation("org.springframework.boot", "spring-boot-starter-test")
     testImplementation("io.projectreactor", "reactor-test")
     testImplementation("io.mockk", "mockk", "1.8.13.kotlin13")
-
-    // Test
     testImplementation("org.junit.jupiter", "junit-jupiter-api")
     testImplementation("org.junit.jupiter", "junit-jupiter-params")
     testRuntime("org.junit.jupiter", "junit-jupiter-engine")
-
 //    // for Intellij
     testRuntime("org.junit.platform", "junit-platform-launcher", "1.3.2")
     testRuntime("org.junit.vintage", "junit-vintage-engine")
