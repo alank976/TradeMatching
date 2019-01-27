@@ -1,4 +1,4 @@
-package io.alank.reactiveplayground.interfaces
+package io.alank.tradematching.interfaces
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

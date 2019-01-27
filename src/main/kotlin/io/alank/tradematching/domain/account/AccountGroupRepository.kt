@@ -1,4 +1,4 @@
-package io.alank.reactiveplayground.domain.account
+package io.alank.tradematching.domain.account
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties

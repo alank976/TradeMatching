@@ -1,11 +1,11 @@
-package io.alank.reactiveplayground.domain.matching
+package io.alank.tradematching.domain.matching
 
-import io.alank.reactiveplayground.domain.account.AccountGroup
-import io.alank.reactiveplayground.domain.trade.BuySellTradeEvent
-import io.alank.reactiveplayground.domain.trade.EndOfTradeStreamEvent
-import io.alank.reactiveplayground.domain.trade.Trade
-import io.alank.reactiveplayground.domain.trade.Way.B
-import io.alank.reactiveplayground.domain.trade.Way.S
+import io.alank.tradematching.domain.account.AccountGroup
+import io.alank.tradematching.domain.trade.BuySellTradeEvent
+import io.alank.tradematching.domain.trade.EndOfTradeStreamEvent
+import io.alank.tradematching.domain.trade.Trade
+import io.alank.tradematching.domain.trade.Way.B
+import io.alank.tradematching.domain.trade.Way.S
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

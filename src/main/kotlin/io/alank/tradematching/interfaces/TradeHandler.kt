@@ -1,7 +1,7 @@
-package io.alank.reactiveplayground.interfaces
+package io.alank.tradematching.interfaces
 
-import io.alank.reactiveplayground.domain.trade.Trade
-import io.alank.reactiveplayground.domain.trade.TradeRepository
+import io.alank.tradematching.domain.trade.Trade
+import io.alank.tradematching.domain.trade.TradeRepository
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.server.ServerRequest
