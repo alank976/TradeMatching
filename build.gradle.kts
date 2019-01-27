@@ -38,7 +38,8 @@ dependencies {
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
 
-    testImplementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
+    implementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
+//    testImplementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
     testImplementation("org.springframework.boot", "spring-boot-starter-test")
     testImplementation("io.projectreactor", "reactor-test")
     testImplementation("io.mockk", "mockk", "1.8.13.kotlin13")
