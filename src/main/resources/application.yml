@@ -3,7 +3,7 @@ spring:
     name: TradeMatching
   data:
     mongodb:
-      uri: mongodb://localhost:32771
+      uri: mongodb://localhost:27017
       database: matching
 server:
   port: 8080

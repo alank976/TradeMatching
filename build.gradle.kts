@@ -6,7 +6,7 @@ val junit5Version = "5.3.2"
 
 plugins {
     idea
-//    `kotlin-dsl`
+    `kotlin-dsl`
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.11"
     id("org.springframework.boot") version "2.1.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
@@ -38,8 +38,7 @@ dependencies {
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
 
-    implementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
-//    testImplementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
+    testImplementation("de.flapdoodle.embed", "de.flapdoodle.embed.mongo")
     testImplementation("org.springframework.boot", "spring-boot-starter-test")
     testImplementation("io.projectreactor", "reactor-test")
     testImplementation("io.mockk", "mockk", "1.8.13.kotlin13")

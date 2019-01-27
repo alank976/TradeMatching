@@ -7,3 +7,7 @@ A toy project implementing trade matching logic by using reactive programming (r
 - gradle (Kotlin DSL)
 - docker
 - graalVM
+
+# How to run
+- `docker -d run mongo`
+- `docker -d -p 8888:8080 run alank976/trade-matching:latest`
