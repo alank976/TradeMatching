@@ -1,8 +1,8 @@
-package io.alank.reactiveplayground.domain.matching
+package io.alank.tradematching.domain.matching
 
 
-import io.alank.reactiveplayground.domain.account.AccountGroup
-import io.alank.reactiveplayground.domain.trade.*
+import io.alank.tradematching.domain.account.AccountGroup
+import io.alank.tradematching.domain.trade.*
 
 data class InstrumentMatching(val accountGroup: AccountGroup,
                               val ticker: String,

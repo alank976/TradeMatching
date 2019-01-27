@@ -1,4 +1,4 @@
-package io.alank.reactiveplayground.domain.trade
+package io.alank.tradematching.domain.trade
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 

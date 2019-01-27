@@ -1,12 +1,12 @@
-package io.alank.reactiveplayground.domain.matching
+package io.alank.tradematching.domain.matching
 
-import io.alank.reactiveplayground.domain.account.AccountGroup
-import io.alank.reactiveplayground.domain.account.AccountProperties
-import io.alank.reactiveplayground.domain.marketdata.MarketDataService
-import io.alank.reactiveplayground.domain.trade.Trade
-import io.alank.reactiveplayground.domain.trade.TradeRepository
-import io.alank.reactiveplayground.domain.trade.Way.B
-import io.alank.reactiveplayground.domain.trade.Way.S
+import io.alank.tradematching.domain.account.AccountGroup
+import io.alank.tradematching.domain.account.AccountProperties
+import io.alank.tradematching.domain.marketdata.MarketDataService
+import io.alank.tradematching.domain.trade.Trade
+import io.alank.tradematching.domain.trade.TradeRepository
+import io.alank.tradematching.domain.trade.Way.B
+import io.alank.tradematching.domain.trade.Way.S
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat

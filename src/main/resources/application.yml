@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ReactivePlayground
+    name: TradeMatching
   data:
     mongodb:
       uri: mongodb://localhost:32771

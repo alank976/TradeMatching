@@ -1,4 +1,4 @@
-package io.alank.reactiveplayground
+package io.alank.tradematching
 
 import org.junit.Ignore
 import org.junit.Test
@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 @SpringBootTest
 @Ignore
-class ReactivePlaygroundApplicationTests {
+class ApplicationTests {
     @Test
     fun contextLoads() {
     }
