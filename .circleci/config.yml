@@ -1,43 +1,66 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
-version: 1
+orbs:
+  gcp-cli: circleci/gcp-cli@1.1.0
+
+version: 2.1
+
 jobs:
   build:
+    working_directory: ~/trade-matching
     docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-
+      - image: circleci/openjdk:8-jdk-browsers
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle.kts" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
+          key: trade-matching-{{ checksum "build.gradle.kts" }}
       - run: gradle dependencies
 
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle.kts" }}
+          key: trade-matching-{{ checksum "build.gradle.kts" }}
 
-      # run tests!
-      - run: gradle test
+      - run: gradle test bootJar
+      - store_test_results:
+          path: build/test-results/test
+      - store_artifacts:
+          path: build/libs/trade-matching-1.0-SNAPSHOT.jar
+      - persist_to_workspace: # for deployment
+          root: .
+          paths:
+            - Dockerfile
+            - build/libs/trade-matching-1.0-SNAPSHOT.jar
+  deploy:
+    docker:
+      - image: google/cloud-sdk
+    working_directory: ~/trade-matching
+    steps:
+      - attach_workspace: # "mount" the persisted files to here
+          at: .
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build docker image
+          command: docker build --tag=trade-matching .
+      - gcp-cli/initialize
+      - run:
+          name: Push docker image to Google Cloud Container Registry
+          command: |-
+            gcloud auth configure-docker
+            CLOUD_IMAGE_NAME=$GCLOUD_REGISTRY_HOST/$GOOGLE_PROJECT_ID/trade-matching:0.1.$CIRCLE_BUILD_NUM
+            docker tag trade-matching $CLOUD_IMAGE_NAME
+            docker push $CLOUD_IMAGE_NAME
 
+
+workflows:
+  version: 2.1
+  workflow:
+    jobs:
+      - build:
+          context: gcp-my_first_project
+      - deploy:
+          context: gcp-my_first_project
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
