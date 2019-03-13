@@ -1,4 +1,8 @@
-version: 2
+orbs:
+  gcp-cli: circleci/gcp-cli@1.1.0
+
+version: 2.1
+
 jobs:
   build:
     working_directory: ~/trade-matching
@@ -6,7 +10,6 @@ jobs:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
       - checkout
-
       - restore_cache:
           key: trade-matching-{{ checksum "build.gradle.kts" }}
       - run: gradle dependencies
@@ -21,10 +24,43 @@ jobs:
           path: build/test-results/test
       - store_artifacts:
           path: build/libs/trade-matching-1.0-SNAPSHOT.jar
-
+      - persist_to_workspace: # for deployment
+          root: .
+          paths:
+            - Dockerfile
+            - build/libs/trade-matching-1.0-SNAPSHOT.jar
+  deploy:
+    docker:
+      - image: google/cloud-sdk
+    working_directory: ~/trade-matching
+    steps:
+      - attach_workspace: # "mount" the persisted files to here
+          at: .
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: |
-          TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build --tag=trade-matching:$TAG .
-#          use gcloud CLI push image later
+      - run:
+          name: Build docker image
+          command: docker build --tag=trade-matching .
+      - gcp-cli/initialize
+      - run:
+          name: Push docker image to Google Cloud Container Registry
+          command: |-
+            gcloud auth configure-docker
+            CLOUD_IMAGE_NAME=$GCLOUD_REGISTRY_HOST/$GOOGLE_PROJECT_ID/trade-matching:0.1.$CIRCLE_BUILD_NUM
+            docker tag trade-matching $CLOUD_IMAGE_NAME
+            docker push $CLOUD_IMAGE_NAME
+
+
+workflows:
+  version: 2.1
+  workflow:
+    jobs:
+      - build:
+          context: gcp-my_first_project
+      - deploy:
+          context: gcp-my_first_project
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
