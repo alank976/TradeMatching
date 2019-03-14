@@ -9,6 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.11"
     id("org.springframework.boot") version "2.1.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
+    id("com.gorylenko.gradle-git-properties") version "2.0.0"
     kotlin("jvm") version "1.3.11"
     kotlin("kapt") version "1.3.11"
 }

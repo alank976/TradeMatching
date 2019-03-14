@@ -11,8 +11,13 @@ server:
 management:
   endpoints:
     web:
+      base-path: /
       exposure:
         include: info,health,beans,mappings
+  endpoint:
+    health:
+      show-details: always
+
 
 app:
   accounts:
