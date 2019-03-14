@@ -33,6 +33,9 @@ jobs:
     docker:
       - image: google/cloud-sdk
     working_directory: ~/trade-matching
+    environment:
+      GCLOUD_IMAGE_NAME: $GCLOUD_REGISTRY_HOST/$GOOGLE_PROJECT_ID/trade-matching
+      IMAGE_TAG: 0.1.$CIRCLE_BUILD_NUM
     steps:
       - attach_workspace: # "mount" the persisted files to here
           at: .
@@ -46,21 +49,20 @@ jobs:
           name: Push docker image to Google Cloud Container Registry
           command: |-
             gcloud auth configure-docker
-            CLOUD_IMAGE_NAME=$GCLOUD_REGISTRY_HOST/$GOOGLE_PROJECT_ID/trade-matching
-            docker tag trade-matching $CLOUD_IMAGE_NAME:latest
-            docker tag $CLOUD_IMAGE_NAME $CLOUD_IMAGE_NAME:0.1.$CIRCLE_BUILD_NUM
-            docker push $CLOUD_IMAGE_NAME
+            docker tag trade-matching $GCLOUD_IMAGE_NAME:latest
+            docker tag $GCLOUD_IMAGE_NAME $GCLOUD_IMAGE_NAME:$IMAGE_TAG
+            docker push $GCLOUD_IMAGE_NAME
       - run:
           name: Configure kubectl in order to access the cluster
           command: gcloud container clusters get-credentials your-first-cluster-1 --zone $GOOGLE_COMPUTE_ZONE --project $GOOGLE_PROJECT_ID
       - run:
           name: Rollout new image or create deployment & service
           command: |-
-            CLOUD_IMAGE_NAME=$GCLOUD_REGISTRY_HOST/$GOOGLE_PROJECT_ID/trade-matching:latest
             if kubectl get deployment trade-matching; then
-                kubectl set image deployment/trade-matching trade-matching=$CLOUD_IMAGE_NAME
+                kubectl set image deployment/trade-matching trade-matching=$GCLOUD_IMAGE_NAME:$IMAGE_TAG
+                kubectl rollout status -w deployment trade-matching
             else
-                kubectl create deployment trade-matching --image=$CLOUD_IMAGE_NAME -o=yaml
+                kubectl create deployment trade-matching --image=$GCLOUD_IMAGE_NAME -o=yaml
                 kubectl scale --replicas=3 deployment trade-matching
                 kubectl expose deployment trade-matching --port=80 --target-port=8080 --type=LoadBalancer -o=yaml
             fi
