@@ -66,7 +66,7 @@ jobs:
             else
                 kubectl create deployment trade-matching --image=$GCLOUD_IMAGE_NAME -o=yaml
                 kubectl scale --replicas=3 deployment trade-matching
-                kubectl expose deployment trade-matching --port=80 --target-port=8080 --type=LoadBalancer -o=yaml
+                kubectl expose deployment trade-matching --port=80 --target-port=8080
             fi
 
 workflows:
