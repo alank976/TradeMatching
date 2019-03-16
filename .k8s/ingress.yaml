@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: basic-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: web-static-ip
+spec:
+  tls:
+    - secretName: alankan-dev-secret
+  rules:
+  - host: nginx.alankan.dev
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-deployment
+          servicePort: 80
+  - host: trade.alankan.dev
+    http:
+      paths:
+      - backend:
+          serviceName: trade-matching
+          servicePort: 80

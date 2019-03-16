@@ -17,3 +17,9 @@ A toy project implementing trade matching logic by using reactive programming (r
 # How to run
 - `docker run -d -p 27017:27017 mongo`
 - `docker run -d -p 8111:8080 trade-matching:latest`
+
+# TLS certificate for Ingress
+- `kubectl create secret tls <name> --cert=<cert path> --key=<key path>`
+
+# Reserve a global IP in GCP
+- `gcloud compute addresses create <name> --global`
