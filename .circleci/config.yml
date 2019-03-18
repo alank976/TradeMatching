@@ -64,7 +64,7 @@ jobs:
                 kubectl set image deployment/trade-matching trade-matching=$GCLOUD_IMAGE_NAME:$IMAGE_TAG
                 kubectl rollout status -w deployment trade-matching
             else
-                kubectl create deployment trade-matching --image=$GCLOUD_IMAGE_NAME -o=yaml
+                kubectl create deployment trade-matching --image=$GCLOUD_IMAGE_NAME:$IMAGE_TAG
                 kubectl scale --replicas=3 deployment trade-matching
                 kubectl expose deployment trade-matching --port=80 --target-port=8080
             fi

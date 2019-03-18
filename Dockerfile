@@ -4,4 +4,4 @@ COPY ./build/libs/trade-matching-1.0-SNAPSHOT.jar /trade-matching/app.jar
 #RUN ./gradlew bootJar
 EXPOSE 8080
 #ENV TESTING a
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-Dspring.profiles.active=default,prod", "-jar", "app.jar"]
