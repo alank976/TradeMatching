@@ -2,3 +2,4 @@ spring:
   data:
     mongodb:
       uri: mongodb://mongo-dev-mongodb-replicaset-client:27017
+      database: matching

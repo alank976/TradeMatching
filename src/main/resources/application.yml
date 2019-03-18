@@ -1,8 +1,6 @@
 spring:
   application:
     name: TradeMatching
-  data:
-      database: matching
 
 server:
   port: 8080

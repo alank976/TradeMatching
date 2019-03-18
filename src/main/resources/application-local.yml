@@ -2,3 +2,4 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:32609
+      database: matching
