@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 group = "io.alank"
 version = "1.0-SNAPSHOT"
@@ -59,5 +60,8 @@ tasks {
     }
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
+    }
+    withType<BootRun> {
+        environment("SPRING_PROFILES_ACTIVE" to "default,local")
     }
 }

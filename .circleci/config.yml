@@ -66,10 +66,10 @@ jobs:
           command: |
             if helm status dev-tm -o yaml; then
                 echo "===== Rollout new version of image ====="
-                helm upgrade dev-tm ./.helm --set image.tag=$IMAGE_TAG --wait
+                helm upgrade dev-tm .helm --set image.tag=$IMAGE_TAG --wait
             else
                 echo "===== Brand new deployment ====="
-                helm install ./.helm --name dev-tm --set image.tag=$IMAGE_TAG,gcloud.registryHost=$GCLOUD_REGISTRY_HOST,gcloud.projectId=$GOOGLE_PROJECT_ID --wait
+                helm install .helm --name dev-tm --set image.tag=$IMAGE_TAG,gcloud.registryHost=$GCLOUD_REGISTRY_HOST,gcloud.projectId=$GOOGLE_PROJECT_ID --wait
             fi
 
 
