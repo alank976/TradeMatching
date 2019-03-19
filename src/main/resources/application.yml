@@ -3,7 +3,7 @@ spring:
     name: TradeMatching
 
 server:
-  port: 8080
+  port: 80
 
 management:
   endpoints:
