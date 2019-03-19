@@ -15,13 +15,16 @@ CircleCI `deploy` build comprises of build, tag, and push image, then helm insta
 ## For local docker run
 
 ### `kubectl` is recommended
-`kubectl run <deployment_name> --image=<gcr>/<project>/trade-matching:latest`
+```bash
+kubectl create svc nodeport mongo --tcp=27017:27017 --node-port=30000
+kubectl create deployment mongo --image=mongo
+```
 
 ### basic docker build and run
 ```bash
-docker build --tag=trade-matching .
+#docker build --tag=trade-matching .
 docker run -d -p 27017:27017 mongoó
-docker run -d -p 8111:8080 trade-matching:latest
+#docker run -d -p 8111:8080 trade-matching:latest
 ```
 
 ## Others
