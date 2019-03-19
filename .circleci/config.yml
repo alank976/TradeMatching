@@ -29,6 +29,7 @@ jobs:
           paths:
             - Dockerfile
             - build/libs/trade-matching-1.0-SNAPSHOT.jar
+            - .helm
   deploy:
     docker:
       - image: google/cloud-sdk
@@ -41,6 +42,9 @@ jobs:
       - run:
           name: Build docker image
           command: docker build --tag=trade-matching .
+      - run:
+          name: Install Helm
+          command: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
       - run:
           name: Set reusable env-vars
           command: |
@@ -60,14 +64,14 @@ jobs:
       - run:
           name: Rollout new image or create deployment & service
           command: |
-            if kubectl get deployment trade-matching; then
-                kubectl set image deployment/trade-matching trade-matching=$GCLOUD_IMAGE_NAME:$IMAGE_TAG
-                kubectl rollout status -w deployment trade-matching
+            if helm status dev-tm -o yaml; then
+                echo "===== Rollout new version of image ====="
+                helm upgrade dev-tm ./.helm --set image.tag=$IMAGE_TAG --wait
             else
-                kubectl create deployment trade-matching --image=$GCLOUD_IMAGE_NAME:$IMAGE_TAG
-                kubectl scale --replicas=3 deployment trade-matching
-                kubectl expose deployment trade-matching --port=80 --target-port=8080
+                echo "===== Brand new deployment ====="
+                helm install ./.helm --name dev-tm --set image.tag=$IMAGE_TAG,gcloud.registryHost=$GCLOUD_REGISTRY_HOST,gcloud.projectId=$GOOGLE_PROJECT_ID --wait
             fi
+
 
 workflows:
   version: 2.1
