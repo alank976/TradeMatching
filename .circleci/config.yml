@@ -83,6 +83,6 @@ workflows:
           context: gcp-my_first_project
           requires:
             - build
-#          filters:
-#            branches:
-#              only: master
+          filters:
+            branches:
+              only: master
