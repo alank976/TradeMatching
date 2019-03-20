@@ -9,14 +9,12 @@ import io.alank.tradematching.domain.trade.Way.B
 import io.alank.tradematching.domain.trade.Way.S
 import io.mockk.every
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import reactor.core.publisher.Flux.just
 import reactor.core.publisher.Mono
-import reactor.test.StepVerifier
-import reactor.test.publisher.TestPublisher
+import reactor.test.test
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -45,8 +43,9 @@ internal class MatchingServiceTest {
                 Trade(id = "3", ticker = "HSBC", way = B, price = 103.0, quantity = 4),
                 Trade(id = "4", ticker = "HSBC", way = S, price = 110.0, quantity = 5)
         )
-        val result = matchingService.match()
-        StepVerifier.create(result)
+
+        matchingService.match()
+                .test() // Kotlinish StepVerifiter
                 .expectNext(
                         MatchedResult(buyTradeId = "1", buyPrice = 100.0, sellTradeId = "2", sellPrice = 105.0, quantity = 2, accountGroup = accountGroupAll),
                         MatchedResult(buyTradeId = "1", buyPrice = 100.0, sellTradeId = "4", sellPrice = 110.0, quantity = 3, accountGroup = accountGroupAll),
@@ -67,15 +66,15 @@ internal class MatchingServiceTest {
                 Trade(id = "4", ticker = "5.HK", way = S, price = 3.0, quantity = 10),
                 Trade(id = "5", ticker = "SOFTBANK", way = S, price = 112.0, quantity = 90)
         )
-        val result = matchingService.match()
-        StepVerifier.create(result)
+
+        matchingService.match()
+                .test()
                 .expectNext(
                         MatchedResult(buyTradeId = "1", buyPrice = 1.0, sellTradeId = "3", sellPrice = 2.0, quantity = 5, accountGroup = accountGroupAll),
                         MatchedResult(buyTradeId = "1", buyPrice = 1.0, sellTradeId = "4", sellPrice = 3.0, quantity = 10, accountGroup = accountGroupAll),
                         MatchedResult(buyTradeId = "2", buyPrice = 111.0, sellTradeId = "5", sellPrice = 112.0, quantity = 90, accountGroup = accountGroupAll),
                         UnmatchedResult(tradeId = "1", way = B, price = 1.0, marketPrice = 0.0, quantity = 5, accountGroup = accountGroupAll)
                 )
-                .verifyComplete()
     }
 
     @Test
@@ -89,16 +88,15 @@ internal class MatchingServiceTest {
                 Trade(id = "4", ticker = "5.HK", way = S, price = 3.0, quantity = 10, account = "c"),
                 Trade(id = "5", ticker = "SOFTBANK", way = S, price = 112.0, quantity = 90, account = "b")
         )
-        val result = matchingService.match()
-        StepVerifier.create(result)
+
+        matchingService.match()
+                .test()
                 .expectNext(
                         MatchedResult(buyTradeId = "1", buyPrice = 1.0, sellTradeId = "3", sellPrice = 2.0, quantity = 5, accountGroup = accountGroupAll),
                         MatchedResult(buyTradeId = "1", buyPrice = 1.0, sellTradeId = "4", sellPrice = 3.0, quantity = 10, accountGroup = accountGroupAll),
                         MatchedResult(buyTradeId = "2", buyPrice = 111.0, sellTradeId = "5", sellPrice = 112.0, quantity = 90, accountGroup = accountGroupAll),
-                        MatchedResult(buyTradeId = "2", buyPrice = 111.0, sellTradeId = "5", sellPrice = 112.0, quantity = 90, accountGroup = accountGroupSmall),
                         UnmatchedResult(tradeId = "1", way = B, price = 1.0, marketPrice = 0.0, quantity = 5, accountGroup = accountGroupAll)
                 )
-                .verifyComplete()
     }
 }
 
