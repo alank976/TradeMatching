@@ -21,7 +21,7 @@ class MatchingService(private val tradeRepository: TradeRepository,
         return Flux.fromIterable(accountProperties.groups)
                 .flatMap { ag ->
                     trades
-                            .filter { it.isInGroup(ag) }
+                            .filter { it isInGroup ag }
                             // match for every instrument
                             .groupBy { it.ticker }
                             .flatMap { instrumentGroup ->
@@ -31,13 +31,13 @@ class MatchingService(private val tradeRepository: TradeRepository,
                                         .map<TradeEvent> { BuySellTradeEvent(it) }
                                         .concatWith(marketDataService.getPrice(ticker)
                                                 .map { EndOfTradeStreamEvent(it) })
-                                        .scan(initial) { matchingInProgress, event -> matchingInProgress.handle(event) }
+                                        .scan(initial) { instrumentMatching, event -> instrumentMatching.handle(event) }
                             }
                             .flatMap { Flux.fromIterable(it.results) }
                 }
     }
 
-    private fun Trade.isInGroup(accountGroup: AccountGroup): Boolean =
+    private infix fun Trade.isInGroup(accountGroup: AccountGroup): Boolean =
             accountGroup.accounts.isEmpty() or accountGroup.accounts.contains(this.account)
 }
 
