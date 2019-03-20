@@ -44,7 +44,7 @@ jobs:
           command: docker build --tag=trade-matching .
       - run:
           name: Install Helm
-          command: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+          command: export DESIRED_VERSION=v2.13.0 && curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
       - run:
           name: Set reusable env-vars
           command: |
