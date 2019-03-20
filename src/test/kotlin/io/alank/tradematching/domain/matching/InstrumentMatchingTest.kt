@@ -29,7 +29,33 @@ internal class InstrumentMatchingTest {
     }
 
     @Test
-    fun `test handle when a buy exists, expect a completely matched result`() {
+    fun `test handle when a buy exists and it had a matched result from last match, and a new buy comes in, expect appended into buyTrades and results`() {
+        val givenTrade = Trade(id = "1",
+                ticker = "HSBC",
+                way = B,
+                price = 1.0,
+                quantity = 8)
+        val givenMatchedResult = MatchedResult(buyTradeId = "1",
+                buyPrice = 1.0,
+                sellTradeId = "2",
+                sellPrice = 2.0,
+                quantity = 2,
+                accountGroup = AccountGroup())
+        val instrumentMatching = InstrumentMatching(accountGroup = AccountGroup(), ticker = "HSBC", buyTrades = listOf(givenTrade), results = listOf(givenMatchedResult))
+
+        val newTrade = givenTrade.copy(id = "3", way = B, quantity = 5)
+        val actual = instrumentMatching.handle(BuySellTradeEvent(newTrade))
+        assertThat(actual)
+                .isEqualTo(InstrumentMatching(
+                        accountGroup = AccountGroup(),
+                        ticker = "HSBC",
+                        buyTrades = listOf(givenTrade, newTrade),
+                        sellTrades = listOf(),
+                        results = listOf()))
+    }
+
+    @Test
+    fun `test handle when a buy exists and a sell comes in, expect a matched result `() {
         val givenTrade = Trade(id = "1",
                 ticker = "HSBC",
                 way = B,
@@ -49,7 +75,7 @@ internal class InstrumentMatchingTest {
     }
 
     @Test
-    fun `test handle when a smaller buy exists, expect a completely matched result and sell trade residual`() {
+    fun `test handle when a smaller buy exists and a sell comes in, expect a matched result and sell trade residual`() {
         val givenTrade = Trade(id = "1",
                 ticker = "HSBC",
                 way = B,
@@ -69,7 +95,7 @@ internal class InstrumentMatchingTest {
     }
 
     @Test
-    fun `test handle when more than 1 buy exist, expect completely matched result and residual buy trades remain`() {
+    fun `test handle when more than 1 buy exist, whose total quantity is greater, and a sell comes in, expect matched result and residual buy trades remain`() {
         val buyTrades = listOf(
                 Trade(id = "1",
                         ticker = "HSBC",
@@ -130,7 +156,7 @@ internal class InstrumentMatchingTest {
     }
 
     @Test
-    fun `test handle end of trade event, when no remainging buy or sell trades inside, expect no unmatched results`() {
+    fun `test handle end of trade event, when no remaining buy or sell trades inside, expect no unmatched results`() {
         val instrumentMatching = InstrumentMatching(accountGroup = AccountGroup(), ticker = "HSBC")
 
         val actual = instrumentMatching.handle(EndOfTradeStreamEvent())
